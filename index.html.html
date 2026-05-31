@@ -1,0 +1,1010 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>HANGUK — Find Your Korea</title>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,700;1,9..144,300&family=DM+Mono:wght@400;500&family=Pretendard:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --black: #0D0D0D;
+    --white: #F7F4EE;
+    --cream: #EDE9E0;
+    --stone: #C8C2B4;
+    --muted: #7A7469;
+    --accent: #C9461A;
+    --accent2: #1A4C7A;
+    --green: #2A5C3F;
+    --card-bg: #F0EDE5;
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--black);
+    color: var(--white);
+    font-family: 'Pretendard', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* HEADER */
+  header {
+    padding: 3rem 4rem 2rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-end;
+    border-bottom: 0.5px solid rgba(255,255,255,0.1);
+  }
+
+  .logo {
+    font-family: 'Fraunces', serif;
+    font-size: 1.1rem;
+    font-weight: 300;
+    letter-spacing: 0.3em;
+    color: var(--stone);
+  }
+
+  .logo span { color: var(--white); }
+
+  .tagline {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+
+  /* HERO */
+  .hero {
+    padding: 5rem 4rem 4rem;
+    max-width: 900px;
+  }
+
+  .hero-eyebrow {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 {
+    font-family: 'Fraunces', serif;
+    font-size: clamp(3rem, 7vw, 5.5rem);
+    font-weight: 300;
+    line-height: 1.05;
+    letter-spacing: -0.02em;
+    margin-bottom: 1.5rem;
+  }
+
+  .hero h1 em {
+    font-style: italic;
+    color: var(--stone);
+  }
+
+  .hero-sub {
+    font-size: 1rem;
+    color: var(--muted);
+    line-height: 1.7;
+    max-width: 480px;
+    font-weight: 300;
+  }
+
+  /* STEP INDICATOR */
+  .steps {
+    display: flex;
+    align-items: center;
+    gap: 0;
+    padding: 0 4rem;
+    margin-bottom: 3rem;
+  }
+
+  .step {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    transition: color 0.3s;
+  }
+
+  .step.active { color: var(--white); }
+  .step.done { color: var(--accent); }
+
+  .step-num {
+    width: 24px;
+    height: 24px;
+    border-radius: 50%;
+    border: 0.5px solid currentColor;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.6rem;
+    flex-shrink: 0;
+    transition: background 0.3s, border-color 0.3s;
+  }
+
+  .step.active .step-num {
+    background: var(--white);
+    color: var(--black);
+    border-color: var(--white);
+  }
+
+  .step.done .step-num {
+    background: var(--accent);
+    color: var(--white);
+    border-color: var(--accent);
+  }
+
+  .step-line {
+    flex: 1;
+    height: 0.5px;
+    background: rgba(255,255,255,0.1);
+    margin: 0 1rem;
+    max-width: 80px;
+  }
+
+  /* SCREENS */
+  .screen { display: none; padding: 0 4rem 6rem; }
+  .screen.active { display: block; }
+
+  /* SCREEN 1 — Content type */
+  .section-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 1.5rem;
+  }
+
+  .content-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.08);
+    border: 1px solid rgba(255,255,255,0.08);
+    margin-bottom: 3rem;
+  }
+
+  .content-card {
+    background: var(--black);
+    padding: 2rem 1.75rem;
+    cursor: pointer;
+    transition: background 0.2s;
+    position: relative;
+  }
+
+  .content-card:hover { background: #1A1A1A; }
+
+  .content-card.selected {
+    background: var(--white);
+    color: var(--black);
+  }
+
+  .content-card-emoji {
+    font-size: 1.8rem;
+    margin-bottom: 1rem;
+    display: block;
+  }
+
+  .content-card-title {
+    font-family: 'Fraunces', serif;
+    font-size: 1.15rem;
+    font-weight: 300;
+    margin-bottom: 0.4rem;
+    letter-spacing: -0.01em;
+  }
+
+  .content-card.selected .content-card-title { color: var(--black); }
+
+  .content-card-desc {
+    font-size: 0.78rem;
+    color: var(--muted);
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  .content-card.selected .content-card-desc { color: #666; }
+
+  .content-card .check {
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+    width: 20px;
+    height: 20px;
+    border-radius: 50%;
+    background: var(--accent);
+    display: none;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .content-card.selected .check { display: flex; }
+
+  .check svg { width: 10px; height: 10px; }
+
+  /* SCREEN 2 — Vibe sliders */
+  .vibe-section { margin-bottom: 2.5rem; }
+
+  .vibe-label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 0.75rem;
+  }
+
+  .vibe-name {
+    font-size: 0.9rem;
+    font-weight: 400;
+    color: var(--white);
+  }
+
+  .vibe-extremes {
+    display: flex;
+    justify-content: space-between;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+    margin-bottom: 0.5rem;
+  }
+
+  .vibe-track {
+    position: relative;
+    height: 2px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 1px;
+  }
+
+  .vibe-fill {
+    position: absolute;
+    left: 0;
+    top: 0;
+    height: 100%;
+    background: var(--white);
+    border-radius: 1px;
+    transition: width 0.1s;
+  }
+
+  input[type="range"] {
+    position: absolute;
+    top: -8px;
+    left: 0;
+    width: 100%;
+    height: 18px;
+    opacity: 0;
+    cursor: pointer;
+    margin: 0;
+  }
+
+  .vibe-thumb {
+    position: absolute;
+    top: 50%;
+    transform: translate(-50%, -50%);
+    width: 14px;
+    height: 14px;
+    background: var(--white);
+    border-radius: 50%;
+    pointer-events: none;
+    transition: left 0.1s;
+  }
+
+  /* SCREEN 3 — Results */
+  .results-header {
+    margin-bottom: 3rem;
+  }
+
+  .results-header h2 {
+    font-family: 'Fraunces', serif;
+    font-size: 2.5rem;
+    font-weight: 300;
+    letter-spacing: -0.02em;
+    margin-bottom: 0.5rem;
+  }
+
+  .results-header p {
+    color: var(--muted);
+    font-size: 0.9rem;
+  }
+
+  .keyword-trail {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 3rem;
+  }
+
+  .kw-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.1em;
+    padding: 0.4rem 0.8rem;
+    border: 0.5px solid rgba(255,255,255,0.2);
+    color: var(--stone);
+    text-transform: uppercase;
+  }
+
+  .kw-tag.primary {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--white);
+  }
+
+  .spots-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1px;
+    background: rgba(255,255,255,0.06);
+    margin-bottom: 4rem;
+  }
+
+  .spot-card {
+    background: var(--black);
+    padding: 2rem;
+    position: relative;
+    overflow: hidden;
+    transition: background 0.2s;
+    cursor: pointer;
+  }
+
+  .spot-card:hover { background: #141414; }
+
+  .spot-index {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    margin-bottom: 1rem;
+  }
+
+  .spot-area {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    letter-spacing: 0.15em;
+    color: var(--accent);
+    text-transform: uppercase;
+    margin-bottom: 0.5rem;
+  }
+
+  .spot-name {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+  }
+
+  .spot-desc {
+    font-size: 0.82rem;
+    color: var(--muted);
+    line-height: 1.65;
+    font-weight: 300;
+    margin-bottom: 1.25rem;
+  }
+
+  .spot-tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .spot-tag {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.55rem;
+    letter-spacing: 0.1em;
+    padding: 0.25rem 0.6rem;
+    background: rgba(255,255,255,0.05);
+    color: var(--stone);
+    text-transform: uppercase;
+    border-radius: 2px;
+  }
+
+  .spot-card::after {
+    content: '→';
+    position: absolute;
+    bottom: 1.5rem;
+    right: 1.75rem;
+    font-size: 1rem;
+    color: var(--muted);
+    transition: transform 0.2s, color 0.2s;
+  }
+
+  .spot-card:hover::after {
+    transform: translateX(4px);
+    color: var(--white);
+  }
+
+  /* BEST TIME STRIP */
+  .time-strip {
+    background: #111;
+    border: 0.5px solid rgba(255,255,255,0.08);
+    padding: 2rem;
+    margin-bottom: 4rem;
+  }
+
+  .time-strip-label {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.2em;
+    color: var(--muted);
+    text-transform: uppercase;
+    margin-bottom: 1.25rem;
+  }
+
+  .time-grid {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1rem;
+  }
+
+  .time-slot {
+    text-align: center;
+    padding: 1rem 0.5rem;
+    border: 0.5px solid rgba(255,255,255,0.06);
+  }
+
+  .time-slot.peak {
+    border-color: rgba(201, 70, 26, 0.4);
+    background: rgba(201, 70, 26, 0.05);
+  }
+
+  .time-slot-name {
+    font-size: 0.75rem;
+    font-weight: 400;
+    margin-bottom: 0.4rem;
+  }
+
+  .time-slot-desc {
+    font-size: 0.65rem;
+    color: var(--muted);
+    line-height: 1.4;
+  }
+
+  .time-slot.peak .time-slot-name { color: var(--accent); }
+
+  /* CTA */
+  .cta-section {
+    border-top: 0.5px solid rgba(255,255,255,0.08);
+    padding-top: 3rem;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .cta-text h3 {
+    font-family: 'Fraunces', serif;
+    font-size: 1.5rem;
+    font-weight: 300;
+    letter-spacing: -0.01em;
+    margin-bottom: 0.4rem;
+  }
+
+  .cta-text p {
+    font-size: 0.8rem;
+    color: var(--muted);
+  }
+
+  .cta-buttons {
+    display: flex;
+    gap: 1rem;
+  }
+
+  .btn {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    padding: 0.9rem 2rem;
+    cursor: pointer;
+    border: none;
+    transition: all 0.2s;
+    text-decoration: none;
+    display: inline-block;
+  }
+
+  .btn-primary {
+    background: var(--white);
+    color: var(--black);
+  }
+
+  .btn-primary:hover {
+    background: var(--cream);
+    transform: translateY(-1px);
+  }
+
+  .btn-secondary {
+    background: transparent;
+    color: var(--stone);
+    border: 0.5px solid rgba(255,255,255,0.2);
+  }
+
+  .btn-secondary:hover {
+    color: var(--white);
+    border-color: rgba(255,255,255,0.4);
+  }
+
+  /* NAV BUTTONS */
+  .nav-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+    padding-top: 2rem;
+    border-top: 0.5px solid rgba(255,255,255,0.08);
+  }
+
+  .nav-hint {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.1em;
+  }
+
+  /* AI BADGE */
+  .ai-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    font-family: 'DM Mono', monospace;
+    font-size: 0.6rem;
+    letter-spacing: 0.1em;
+    color: var(--muted);
+    text-transform: uppercase;
+    padding: 0.4rem 0.8rem;
+    border: 0.5px solid rgba(255,255,255,0.08);
+    margin-bottom: 3rem;
+  }
+
+  .ai-dot {
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--green);
+    animation: pulse 2s infinite;
+  }
+
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+  }
+
+  /* LOADING STATE */
+  .loading-state {
+    display: none;
+    padding: 4rem 0;
+    text-align: center;
+  }
+
+  .loading-state.active { display: block; }
+
+  .loading-bar {
+    width: 100%;
+    height: 1px;
+    background: rgba(255,255,255,0.1);
+    position: relative;
+    overflow: hidden;
+    margin-bottom: 2rem;
+  }
+
+  .loading-progress {
+    position: absolute;
+    left: -100%;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: var(--white);
+    animation: loading 1.5s ease-in-out forwards;
+  }
+
+  @keyframes loading {
+    0% { left: -100%; }
+    100% { left: 0%; }
+  }
+
+  .loading-text {
+    font-family: 'DM Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--muted);
+    letter-spacing: 0.2em;
+    text-transform: uppercase;
+  }
+
+  /* FADE IN */
+  .fade-in {
+    animation: fadeIn 0.5s ease forwards;
+  }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  @media (max-width: 768px) {
+    header, .screen, .steps { padding-left: 1.5rem; padding-right: 1.5rem; }
+    .hero { padding: 3rem 1.5rem 2rem; }
+    .content-grid { grid-template-columns: 1fr; }
+    .spots-grid { grid-template-columns: 1fr; }
+    .time-grid { grid-template-columns: repeat(2, 1fr); }
+    .cta-section { flex-direction: column; gap: 2rem; align-items: flex-start; }
+    .steps { flex-wrap: wrap; gap: 1rem; }
+    .step-line { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="logo"><span>HANG</span>UK</div>
+  <div class="tagline">Find your Korea — Powered by TourAPI</div>
+</header>
+
+<div class="hero">
+  <div class="hero-eyebrow">Korea Travel Discovery</div>
+  <h1>You've seen Korea<br>on screen. Now<br><em>find yours.</em></h1>
+  <p class="hero-sub">Most travelers see 10% of Korea. The rest — the late-night alleys, the rooftop bars, the architecture walks — stays hidden. Not anymore.</p>
+</div>
+
+<div class="steps">
+  <div class="step active" id="step1">
+    <div class="step-num">1</div>
+    <span>What you watch</span>
+  </div>
+  <div class="step-line"></div>
+  <div class="step" id="step2">
+    <div class="step-num">2</div>
+    <span>Your vibe</span>
+  </div>
+  <div class="step-line"></div>
+  <div class="step" id="step3">
+    <div class="step-num">3</div>
+    <span>Your Korea</span>
+  </div>
+</div>
+
+<!-- SCREEN 1 -->
+<div class="screen active" id="screen-1">
+  <p class="section-label">Step 01 — What K-content do you love?</p>
+  <div class="content-grid">
+    <div class="content-card" onclick="selectContent(this, 'kpop')">
+      <span class="content-card-emoji">🎵</span>
+      <div class="check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="content-card-title">K-Pop / K-Music</div>
+      <div class="content-card-desc">BTS, NewJeans, aespa, IVE — you know the choreo, you know the fandom</div>
+    </div>
+    <div class="content-card" onclick="selectContent(this, 'drama')">
+      <span class="content-card-emoji">📺</span>
+      <div class="check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="content-card-title">K-Drama / Film</div>
+      <div class="content-card-desc">Squid Game, Crash Landing, Parasite — the streets and cafés feel familiar</div>
+    </div>
+    <div class="content-card" onclick="selectContent(this, 'food')">
+      <span class="content-card-emoji">🍜</span>
+      <div class="check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="content-card-title">Korean Food</div>
+      <div class="content-card-desc">Mukbang, street food vlogs, ramyeon at 2am — it's always about the food</div>
+    </div>
+    <div class="content-card" onclick="selectContent(this, 'aesthetic')">
+      <span class="content-card-emoji">🏙</span>
+      <div class="check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="content-card-title">Korean Aesthetic</div>
+      <div class="content-card-desc">Architecture, fashion, skincare culture — the visual language of Seoul</div>
+    </div>
+    <div class="content-card" onclick="selectContent(this, 'sport')">
+      <span class="content-card-emoji">⚽</span>
+      <div class="check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="content-card-title">Sports / Gaming</div>
+      <div class="content-card-desc">Korean esports, Son Heung-min, the 2002 World Cup legend</div>
+    </div>
+    <div class="content-card" onclick="selectContent(this, 'culture')">
+      <span class="content-card-emoji">🏯</span>
+      <div class="check"><svg viewBox="0 0 10 8" fill="none"><path d="M1 4L3.5 6.5L9 1" stroke="white" stroke-width="1.5" stroke-linecap="round"/></svg></div>
+      <div class="content-card-title">History / Culture</div>
+      <div class="content-card-desc">Joseon dynasty, hanbok, traditional arts — Korea's 5,000-year depth</div>
+    </div>
+  </div>
+  <div class="nav-row">
+    <span class="nav-hint">Select at least one</span>
+    <button class="btn btn-primary" onclick="goTo(2)">Next →</button>
+  </div>
+</div>
+
+<!-- SCREEN 2 -->
+<div class="screen" id="screen-2">
+  <p class="section-label">Step 02 — Define your travel vibe</p>
+
+  <div class="vibe-section">
+    <div class="vibe-label">
+      <span class="vibe-name">Energy level</span>
+    </div>
+    <div class="vibe-extremes">
+      <span>Slow & contemplative</span>
+      <span>High-energy, always moving</span>
+    </div>
+    <div class="vibe-track" id="track-energy">
+      <div class="vibe-fill" id="fill-energy" style="width:50%"></div>
+      <div class="vibe-thumb" id="thumb-energy" style="left:50%"></div>
+      <input type="range" min="0" max="100" value="50" id="slider-energy" oninput="updateSlider('energy', this.value)">
+    </div>
+  </div>
+
+  <div class="vibe-section">
+    <div class="vibe-label">
+      <span class="vibe-name">Scene preference</span>
+    </div>
+    <div class="vibe-extremes">
+      <span>Hidden locals-only spots</span>
+      <span>Iconic, unmissable places</span>
+    </div>
+    <div class="vibe-track" id="track-scene">
+      <div class="vibe-fill" id="fill-scene" style="width:30%"></div>
+      <div class="vibe-thumb" id="thumb-scene" style="left:30%"></div>
+      <input type="range" min="0" max="100" value="30" id="slider-scene" oninput="updateSlider('scene', this.value)">
+    </div>
+  </div>
+
+  <div class="vibe-section">
+    <div class="vibe-label">
+      <span class="vibe-name">Time of day</span>
+    </div>
+    <div class="vibe-extremes">
+      <span>Morning person, early starts</span>
+      <span>Night owl, city after dark</span>
+    </div>
+    <div class="vibe-track" id="track-time">
+      <div class="vibe-fill" id="fill-time" style="width:70%"></div>
+      <div class="vibe-thumb" id="thumb-time" style="left:70%"></div>
+      <input type="range" min="0" max="100" value="70" id="slider-time" oninput="updateSlider('time', this.value)">
+    </div>
+  </div>
+
+  <div class="vibe-section">
+    <div class="vibe-label">
+      <span class="vibe-name">Spending style</span>
+    </div>
+    <div class="vibe-extremes">
+      <span>Street food & guesthouses</span>
+      <span>Omakase & five-star stays</span>
+    </div>
+    <div class="vibe-track" id="track-spend">
+      <div class="vibe-fill" id="fill-spend" style="width:60%"></div>
+      <div class="vibe-thumb" id="thumb-spend" style="left:60%"></div>
+      <input type="range" min="0" max="100" value="60" id="slider-spend" oninput="updateSlider('spend', this.value)">
+    </div>
+  </div>
+
+  <div class="nav-row">
+    <button class="btn btn-secondary" onclick="goTo(1)">← Back</button>
+    <button class="btn btn-primary" onclick="generateResults()">Generate my Korea →</button>
+  </div>
+</div>
+
+<!-- LOADING -->
+<div class="loading-state" id="loading">
+  <div class="loading-bar"><div class="loading-progress" id="loading-bar"></div></div>
+  <p class="loading-text">Curating your Korea from 260,000+ data points...</p>
+</div>
+
+<!-- SCREEN 3 -->
+<div class="screen" id="screen-3">
+
+  <div class="ai-badge">
+    <div class="ai-dot"></div>
+    <span>AI-curated via TourAPI × KakaoMap × Claude</span>
+  </div>
+
+  <div class="results-header fade-in">
+    <h2 id="result-title">Your Korea is —</h2>
+    <p id="result-subtitle">Based on your content taste and travel vibe</p>
+  </div>
+
+  <div class="keyword-trail fade-in" id="keyword-trail"></div>
+
+  <p class="section-label">Spots curated for you</p>
+  <div class="spots-grid fade-in" id="spots-grid"></div>
+
+  <div class="time-strip fade-in">
+    <div class="time-strip-label">Best time to visit · Based on your vibe profile</div>
+    <div class="time-grid" id="time-grid"></div>
+  </div>
+
+  <div class="cta-section fade-in">
+    <div class="cta-text">
+      <h3>Ready to plan the full trip?</h3>
+      <p>Day-by-day itinerary with real-time flight and hotel data</p>
+    </div>
+    <div class="cta-buttons">
+      <button class="btn btn-secondary" onclick="goTo(1)">Start over</button>
+      <button class="btn btn-primary">Build itinerary →</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const state = {
+  content: [],
+  energy: 50,
+  scene: 30,
+  time: 70,
+  spend: 60
+};
+
+const SPOT_DATA = {
+  kpop: [
+    { area: 'Mapo-gu', name: 'Hongdae Free Stage', desc: 'The beating heart of indie music culture. Catch impromptu performances any night — this is where careers begin.', tags: ['live music', 'nightlife', 'youth culture'] },
+    { area: 'Gangnam-gu', name: 'COEX K-Pop Square', desc: 'Massive outdoor LED screens, fandom pop-ups, and the gravitational center of idol culture in southern Seoul.', tags: ['kpop', 'iconic', 'shopping'] },
+    { area: 'Yongsan-gu', name: 'Hannam Record Stores', desc: 'Independent vinyl shops in Hannam-dong — where the music industry insiders actually shop.', tags: ['hidden gem', 'local', 'music'] },
+    { area: 'Jung-gu', name: 'Nanta Theatre District', desc: 'Korea\'s original performance culture hub, now a maze of small theatres mixing tradition with modern stagecraft.', tags: ['performance', 'culture', 'evening'] }
+  ],
+  drama: [
+    { area: 'Jongno-gu', name: 'Bukchon Hanok Village', desc: 'The filming location you\'ve already seen in a hundred dramas. In real life, it\'s even more cinematic — especially at dawn.', tags: ['iconic', 'morning', 'architecture'] },
+    { area: 'Mapo-gu', name: 'Nodeul Island', desc: 'A locals\' secret in the Han River. Live music venue, independent bookshop, craft brewery. No tour buses, just Seoulites.', tags: ['hidden gem', 'local', 'romantic'] },
+    { area: 'Jung-gu', name: 'Euljiro Alley System', desc: 'The industrial printing district that became Seoul\'s most talked-about creative corridor. Parasite was filmed nearby.', tags: ['trendy', 'nightlife', 'local'] },
+    { area: 'Seongdong-gu', name: 'Seongsu Artisan Quarter', desc: 'Seoul\'s Brooklyn. Converted shoe factories now house specialty coffee, designer studios, and art galleries.', tags: ['aesthetic', 'cafe', 'architecture'] }
+  ],
+  food: [
+    { area: 'Jung-gu', name: 'Gwangjang Market Dawn Run', desc: 'Arrive before 7am when the vendors set up. Bindaetteok, mayak gimbap, and raw beef — the real Seoul breakfast.', tags: ['morning', 'local', 'street food'] },
+    { area: 'Mapo-gu', name: 'Mangwon Saturday Market', desc: 'The neighborhood farmers\' market that food-savvy locals actually go to. Seasonal, slow, and deeply local.', tags: ['local', 'weekend', 'hidden gem'] },
+    { area: 'Gangnam-gu', name: 'Garosu-gil Omakase Row', desc: 'A single block with five world-class omakase restaurants. Book months ahead or walk in at 11pm for last-seat magic.', tags: ['high-end', 'evening', 'foodie'] },
+    { area: 'Jongno-gu', name: 'Ikseon-dong Pojangmacha', desc: 'Pojangmacha (street tent bars) in the alley network of Ikseon — soju, grilled skewers, and strangers becoming friends.', tags: ['nightlife', 'local', 'affordable'] }
+  ],
+  aesthetic: [
+    { area: 'Gangnam-gu', name: 'Cheongdam Architecture Walk', desc: 'More independent-designed buildings per block than anywhere in Seoul. No two facades are alike — this is what design law produces.', tags: ['architecture', 'afternoon', 'walking'] },
+    { area: 'Yongsan-gu', name: 'Itaewon Grand Hyatt Bar', desc: 'Mahogany\'s at the Grand Hyatt — the high-end multilingual late-night scene, elevated above the city.', tags: ['high-end', 'nightlife', 'views'] },
+    { area: 'Seongdong-gu', name: 'SM Entertainment Complex', desc: 'The recently opened entertainment campus — brutalist architecture meets K-pop cultural institution.', tags: ['kpop', 'architecture', 'iconic'] },
+    { area: 'Mapo-gu', name: 'Hapjeong Print Studios', desc: 'A cluster of risograph and letterpress studios where Seoul\'s graphic design underground creates. Tours by appointment.', tags: ['design', 'hidden gem', 'local'] }
+  ],
+  sport: [
+    { area: 'Songpa-gu', name: 'Jamsil Stadium District', desc: 'Korean baseball is a full theatrical production — sit in the bleachers with chicken and beer for pure joy.', tags: ['sports', 'evening', 'local'] },
+    { area: 'Mapo-gu', name: 'Seoul Esports Arena', desc: 'Watch professional StarCraft and LoL players compete in person — the birthplace of modern esports culture.', tags: ['gaming', 'evening', 'iconic'] },
+    { area: 'Yongsan-gu', name: 'Dragon City Casino Level', desc: '24-hour foreigner-permitted casino in Dragon City tower, Yongsan. The legal, well-run way to experience Korean casino culture.', tags: ['nightlife', 'high-end', 'casino'] },
+    { area: 'Gangnam-gu', name: 'Han River Cycling Dawn', desc: 'Rent a bike at 5am and ride the Han River path as Seoul wakes. Completely free, completely transformative.', tags: ['morning', 'outdoor', 'local'] }
+  ],
+  culture: [
+    { area: 'Jongno-gu', name: 'Gyeongbokgung Pre-Dawn', desc: 'The palace gate opens at 9am but walk the walls at 8:30. No crowds, no noise — just 600 years of Joseon dynasty.', tags: ['morning', 'history', 'iconic'] },
+    { area: 'Jongno-gu', name: 'Unhyeongung Secret Garden', desc: 'The private residence of Joseon\'s last regent — almost no tourists, maintained exactly as in 1870.', tags: ['hidden gem', 'history', 'local'] },
+    { area: 'Mapo-gu', name: 'National Museum of Modern Art', desc: 'The MMCA Seoul in Changgyeong Palace grounds — contemporary Korean art in a 600-year-old context.', tags: ['art', 'culture', 'afternoon'] },
+    { area: 'Yongsan-gu', name: 'War Memorial Museum Rooftop', desc: 'One of the most overlooked views in Seoul. The outdoor aircraft exhibition at dusk is unexpectedly cinematic.', tags: ['history', 'views', 'afternoon'] }
+  ]
+};
+
+const PERSONAS = {
+  high_hidden_night_spend: { title: 'The Nocturnal Curator', sub: 'You don\'t follow the map. You rewrite it — after midnight.' },
+  high_hidden_night_street: { title: 'The Alley Wanderer', sub: 'Seoul\'s best stories are written in pojangmacha smoke and neon.' },
+  high_iconic_night_spend: { title: 'The High-Life Seeker', sub: 'You want Seoul at its most elevated — views, omakase, and rooftop bars.' },
+  low_hidden_morning_street: { title: 'The Dawn Devotee', sub: 'You\'re at the market before the tourists wake up. That\'s the point.' },
+  default: { title: 'The Selective Traveler', sub: 'You\'ve done the landmarks. Now you want what the guidebooks miss.' }
+};
+
+function selectContent(el, type) {
+  el.classList.toggle('selected');
+  const idx = state.content.indexOf(type);
+  if (idx > -1) state.content.splice(idx, 1);
+  else state.content.push(type);
+}
+
+function updateSlider(name, val) {
+  state[name] = parseInt(val);
+  document.getElementById('fill-' + name).style.width = val + '%';
+  document.getElementById('thumb-' + name).style.left = val + '%';
+}
+
+function goTo(screen) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + screen).classList.add('active');
+  for (let i = 1; i <= 3; i++) {
+    const s = document.getElementById('step' + i);
+    s.classList.remove('active', 'done');
+    if (i < screen) s.classList.add('done');
+    else if (i === screen) s.classList.add('active');
+  }
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function generateResults() {
+  if (state.content.length === 0) state.content = ['drama'];
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  const loading = document.getElementById('loading');
+  loading.classList.add('active');
+  const bar = document.getElementById('loading-bar');
+  bar.style.animation = 'none';
+  bar.offsetHeight;
+  bar.style.animation = 'loading 1.8s ease-in-out forwards';
+  setTimeout(() => {
+    loading.classList.remove('active');
+    buildResults();
+    goTo(3);
+  }, 1900);
+}
+
+function buildResults() {
+  const isHighEnergy = state.energy > 60;
+  const isHidden = state.scene < 50;
+  const isNight = state.time > 55;
+  const isHighSpend = state.spend > 55;
+
+  let personaKey = 'default';
+  if (isHighEnergy && isHidden && isNight && isHighSpend) personaKey = 'high_hidden_night_spend';
+  else if (isHighEnergy && isHidden && isNight && !isHighSpend) personaKey = 'high_hidden_night_street';
+  else if (isHighEnergy && !isHidden && isNight && isHighSpend) personaKey = 'high_iconic_night_spend';
+  else if (!isHighEnergy && isHidden && !isNight && !isHighSpend) personaKey = 'low_hidden_morning_street';
+
+  const persona = PERSONAS[personaKey] || PERSONAS.default;
+  document.getElementById('result-title').textContent = persona.title;
+  document.getElementById('result-subtitle').textContent = persona.sub;
+
+  const keywords = [];
+  if (isNight) keywords.push({ text: 'Night Seoul', primary: true });
+  else keywords.push({ text: 'Morning Seoul', primary: true });
+  if (isHidden) keywords.push({ text: 'Off the map', primary: false });
+  else keywords.push({ text: 'Iconic picks', primary: false });
+  if (isHighSpend) keywords.push({ text: 'High-end', primary: false });
+  else keywords.push({ text: 'Local price', primary: false });
+  state.content.forEach(c => {
+    const labels = { kpop: 'K-Pop trail', drama: 'Drama locations', food: 'Food deep dive', aesthetic: 'Design Seoul', sport: 'Sports culture', culture: 'Historical depth' };
+    keywords.push({ text: labels[c] || c, primary: false });
+  });
+
+  const trail = document.getElementById('keyword-trail');
+  trail.innerHTML = keywords.map(k => `<span class="kw-tag ${k.primary ? 'primary' : ''}">${k.text}</span>`).join('');
+
+  let allSpots = [];
+  state.content.forEach(c => {
+    if (SPOT_DATA[c]) allSpots = allSpots.concat(SPOT_DATA[c]);
+  });
+
+  if (allSpots.length === 0) allSpots = SPOT_DATA.drama;
+
+  if (isHidden) allSpots = allSpots.filter(s => s.tags.includes('hidden gem') || s.tags.includes('local')).concat(allSpots.filter(s => !s.tags.includes('hidden gem') && !s.tags.includes('local')));
+  if (isNight) allSpots = allSpots.filter(s => s.tags.includes('nightlife') || s.tags.includes('evening')).concat(allSpots.filter(s => !s.tags.includes('nightlife') && !s.tags.includes('evening')));
+
+  const seen = new Set();
+  const unique = allSpots.filter(s => {
+    if (seen.has(s.name)) return false;
+    seen.add(s.name);
+    return true;
+  });
+
+  const picks = unique.slice(0, 6);
+  const grid = document.getElementById('spots-grid');
+  grid.innerHTML = picks.map((s, i) => `
+    <div class="spot-card">
+      <div class="spot-index">0${i + 1}</div>
+      <div class="spot-area">${s.area}</div>
+      <div class="spot-name">${s.name}</div>
+      <div class="spot-desc">${s.desc}</div>
+      <div class="spot-tags">${s.tags.map(t => `<span class="spot-tag">${t}</span>`).join('')}</div>
+    </div>
+  `).join('');
+
+  const times = isNight
+    ? [
+        { name: 'Afternoon', desc: 'Check-in, light explore', peak: false },
+        { name: 'Evening', desc: 'Dinner, golden hour', peak: false },
+        { name: 'Night', desc: 'Your prime time', peak: true },
+        { name: 'Late night', desc: 'Still going strong', peak: true }
+      ]
+    : [
+        { name: 'Dawn', desc: 'Empty streets, real Seoul', peak: true },
+        { name: 'Morning', desc: 'Markets and temples', peak: true },
+        { name: 'Afternoon', desc: 'Cafés, galleries, walks', peak: false },
+        { name: 'Evening', desc: 'Dinner and wind-down', peak: false }
+      ];
+
+  document.getElementById('time-grid').innerHTML = times.map(t => `
+    <div class="time-slot ${t.peak ? 'peak' : ''}">
+      <div class="time-slot-name">${t.name}</div>
+      <div class="time-slot-desc">${t.desc}</div>
+    </div>
+  `).join('');
+}
+</script>
+</body>
+</html>
